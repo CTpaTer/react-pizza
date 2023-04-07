@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 
 import './scss/app.scss';
 
@@ -13,11 +14,13 @@ function App() {
   const [items, setItems] = React.useState([]);
 
   React.useEffect(() => {
-    fetch(`${apiUrl}`)
-      .then((res) => res.json())
-      .then((arr) => {
-        setItems(arr);
+    try {
+      axios.get(`${apiUrl}`).then((arr) => {
+        setItems(arr.data);
       });
+    } catch (error) {
+      console.log(error);
+    }
   }, []);
 
   return (
