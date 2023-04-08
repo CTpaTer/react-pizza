@@ -6,7 +6,7 @@ import { Sort } from '../components/Sort';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { Skeleton } from '../components/PizzaBlock/Sceleton';
 
-export const Home = () => {
+export const Home = ({ searchValue }) => {
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [categoryId, setCategoryId] = React.useState(0);
@@ -18,10 +18,11 @@ export const Home = () => {
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const sort = `&sortBy=${sortType.sortProperty}`;
     const order = sortingOrder ? 'desc' : 'asc';
+    const search = searchValue ? `&search=${searchValue}` : '';
 
     try {
       setIsLoading(true);
-      axios.get(`${apiUrl}${category}${sort}&order=${order}`).then((arr) => {
+      axios.get(`${apiUrl}${category}${sort}&order=${order}${search}`).then((arr) => {
         setItems(arr.data);
         setIsLoading(false);
       });
@@ -29,7 +30,21 @@ export const Home = () => {
       console.log(error);
     }
     window.scrollTo(0, 0);
-  }, [categoryId, sortType, sortingOrder]);
+  }, [categoryId, sortType, sortingOrder, searchValue]);
+
+  // Фильтрация на статичных данных
+  // const pizzas = items
+  //   .filter((obj) => {
+  //     if (obj.title.toLowerCase().includes(searchValue.toLowerCase())) {
+  //       return true;
+  //     }
+  //     return false;
+  //   })
+  //   .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+
+  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+
+  const skeleton = [...new Array(8)].map((_, index) => <Skeleton key={index} />);
 
   return (
     <div className="container">
@@ -43,11 +58,7 @@ export const Home = () => {
         />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">
-        {isLoading
-          ? [...new Array(8)].map((_, index) => <Skeleton key={index} />)
-          : items.map((obj) => <PizzaBlock key={obj.id} {...obj} />)}
-      </div>
+      <div className="content__items">{isLoading ? skeleton : pizzas}</div>
     </div>
   );
 };
