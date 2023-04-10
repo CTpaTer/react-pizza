@@ -5,8 +5,10 @@ import { Categories } from '../components/Categories';
 import { Sort } from '../components/Sort';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { Skeleton } from '../components/PizzaBlock/Sceleton';
+import { SearchContext } from '../App';
 
-export const Home = ({ searchValue }) => {
+export const Home = () => {
+  const { searchValue } = React.useContext(SearchContext);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [categoryId, setCategoryId] = React.useState(0);
@@ -17,12 +19,12 @@ export const Home = ({ searchValue }) => {
     const apiUrl = 'https://642ed4682b883abc64182eca.mockapi.io/items?';
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const sort = `&sortBy=${sortType.sortProperty}`;
-    const order = sortingOrder ? 'desc' : 'asc';
-    const search = searchValue ? `&search=${searchValue}` : '';
+    const order = sortingOrder ? '&order=desc' : '&order=asc';
+    const search = searchValue ? `&title=${searchValue}` : '';
 
     try {
       setIsLoading(true);
-      axios.get(`${apiUrl}${category}${sort}&order=${order}${search}`).then((arr) => {
+      axios.get(`${apiUrl}${category}${sort}${order}${search}`).then((arr) => {
         setItems(arr.data);
         setIsLoading(false);
       });
