@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setSort, setSortingOrder } from '../redux/slices/filterSlice';
 
-export function Sort({ value, onChangeSort }) {
+export function Sort() {
   const dispatch = useDispatch();
   const sortOrder = useSelector((state) => state.filter.order);
   const sort = useSelector((state) => state.filter.sort);
