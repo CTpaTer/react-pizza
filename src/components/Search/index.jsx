@@ -1,5 +1,5 @@
 import React from 'react';
-import debounce from 'lodash.debounce';
+// import debounce from 'lodash.debounce';
 
 import styles from './Search.module.scss';
 import { SearchContext } from '../../App';
@@ -9,19 +9,40 @@ export const Search = () => {
   const { setSearchValue } = React.useContext(SearchContext);
   const inputRef = React.useRef();
 
+  const debounce = (fn, wait) => {
+    let timeout;
+    return (...arg) => {
+      if (timeout) clearTimeout(timeout);
+      timeout = setTimeout(() => fn(...arg), wait);
+    };
+  };
+
   const onClickClear = () => {
     setSearchValue('');
     setValue('');
     inputRef.current.focus();
   };
 
-  const updateSearchValue = React.useMemo(
-    () =>
-      debounce((str) => {
-        setSearchValue(str);
-      }, 1000),
-    [setSearchValue],
-  );
+  // const updateSearchValue = React.useCallback(
+  //   debounce((str) => {
+  //     setSearchValue(str);
+  //   }, 1000),
+  //   [],
+  // );
+
+  // const updateSearchValue = React.useMemo(
+  //   () =>
+  //     debounce((str) => {
+  //       setSearchValue(str);
+  //     }, 1000),
+  //   [setSearchValue],
+  // );
+
+  const updateSearchValue = React.useRef(
+    debounce((str) => {
+      setSearchValue(str);
+    }, 600),
+  ).current;
 
   const onChangeInput = (event) => {
     setValue(event.target.value);
