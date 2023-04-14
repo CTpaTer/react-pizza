@@ -1,7 +1,6 @@
 # React Pizza
 
 ## Технологии:
-
 - **ReactJS 18**
 - **TypeScript**
 - **Redux Toolkit** (хранение данных / пицц)
