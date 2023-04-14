@@ -1,5 +1,5 @@
 # React Pizza
----
+
 ## Технологии:
 
 - **ReactJS 18**
