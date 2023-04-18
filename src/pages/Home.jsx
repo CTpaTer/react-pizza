@@ -28,7 +28,7 @@ export const Home = () => {
     dispatch(setCategoryId(id));
   };
 
-  const fetchPizzas = () => {
+  const fetchPizzas = async () => {
     const apiUrl = 'https://642ed4682b883abc64182eca.mockapi.io/items?';
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const sort = `&sortBy=${sortType}`;
@@ -37,12 +37,12 @@ export const Home = () => {
 
     try {
       setIsLoading(true);
-      axios.get(`${apiUrl}${category}${sort}${order}${search}`).then((arr) => {
-        setItems(arr.data);
-        setIsLoading(false);
-      });
+      const res = await axios.get(`${apiUrl}${category}${sort}${order}${search}`);
+      setItems(res.data);
     } catch (error) {
       console.log(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
