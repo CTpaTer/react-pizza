@@ -1,5 +1,4 @@
 import React from 'react';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { Categories } from '../components/Categories';
@@ -9,15 +8,16 @@ import { Skeleton } from '../components/PizzaBlock/Sceleton';
 import { SearchContext } from '../App';
 import { setCategoryId, setFilters } from '../redux/slices/filterSlice';
 import { useSearchParams } from 'react-router-dom';
+import { fetchPizzasData } from '../redux/slices/pizzaSlice';
 
 export const Home = () => {
   const dispatch = useDispatch();
   const categoryId = useSelector((state) => state.filter.categoryId);
   const sortingOrder = useSelector((state) => state.filter.order);
   const sortType = useSelector((state) => state.filter.sort.sortProperty);
+  const items = useSelector((state) => state.pizza.items);
 
   const { searchValue } = React.useContext(SearchContext);
-  const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -37,8 +37,15 @@ export const Home = () => {
 
     try {
       setIsLoading(true);
-      const res = await axios.get(`${apiUrl}${category}${sort}${order}${search}`);
-      setItems(res.data);
+      dispatch(
+        fetchPizzasData({
+          apiUrl,
+          category,
+          sort,
+          order,
+          search,
+        }),
+      );
     } catch (error) {
       console.log(error);
     } finally {
@@ -68,13 +75,7 @@ export const Home = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   React.useEffect(() => {
-    window.scrollTo(0, 0);
-
-    if (!isSearch.current) {
-      fetchPizzas();
-    }
-
-    isSearch.current = false;
+    fetchPizzas();
   }, [categoryId, sortType, sortingOrder, searchValue]); // eslint-disable-line react-hooks/exhaustive-deps
 
   React.useEffect(() => {
