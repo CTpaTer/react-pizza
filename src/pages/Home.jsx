@@ -15,13 +15,11 @@ export const Home = () => {
   const categoryId = useSelector((state) => state.filter.categoryId);
   const sortingOrder = useSelector((state) => state.filter.order);
   const sortType = useSelector((state) => state.filter.sort.sortProperty);
-  const items = useSelector((state) => state.pizza.items);
+  const { items, status } = useSelector((state) => state.pizza);
 
   const { searchValue } = React.useContext(SearchContext);
-  const [isLoading, setIsLoading] = React.useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const isSearch = React.useRef(false);
   const isMounted = React.useRef(false);
 
   const onChangeCategory = (id) => {
@@ -35,22 +33,15 @@ export const Home = () => {
     const order = sortingOrder ? '&order=desc' : '&order=asc';
     const search = searchValue ? `&title=${searchValue}` : '';
 
-    try {
-      setIsLoading(true);
-      dispatch(
-        fetchPizzasData({
-          apiUrl,
-          category,
-          sort,
-          order,
-          search,
-        }),
-      );
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
+    dispatch(
+      fetchPizzasData({
+        apiUrl,
+        category,
+        sort,
+        order,
+        search,
+      }),
+    );
   };
 
   React.useEffect(() => {
@@ -70,7 +61,6 @@ export const Home = () => {
           list,
         }),
       );
-      isSearch.current = true;
     }
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -107,7 +97,14 @@ export const Home = () => {
         <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">{isLoading ? skeleton : pizzas}</div>
+      {status === 'error' ? (
+        <div className="content__error-info">
+          <h2>Произошла ошибка. 😕</h2>
+          <p>К сожалению, пиццы не найдены. Попробуйте повторить попытку позже.</p>
+        </div>
+      ) : (
+        <div className="content__items">{status === 'loading' ? skeleton : pizzas}</div>
+      )}
     </div>
   );
 };
