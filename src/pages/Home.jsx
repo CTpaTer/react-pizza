@@ -5,19 +5,21 @@ import { Categories } from '../components/Categories';
 import { Sort, sortList } from '../components/Sort';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { Skeleton } from '../components/PizzaBlock/Sceleton';
-import { SearchContext } from '../App';
 import { setCategoryId, setFilters } from '../redux/slices/filterSlice';
 import { useSearchParams } from 'react-router-dom';
 import { fetchPizzasData } from '../redux/slices/pizzaSlice';
 
 export const Home = () => {
   const dispatch = useDispatch();
-  const categoryId = useSelector((state) => state.filter.categoryId);
-  const sortingOrder = useSelector((state) => state.filter.order);
-  const sortType = useSelector((state) => state.filter.sort.sortProperty);
+  const {
+    categoryId,
+    order: sortingOrder,
+    sort,
+    searchValue,
+  } = useSelector((state) => state.filter);
+  const sortType = sort.sortProperty;
   const { items, status } = useSelector((state) => state.pizza);
 
-  const { searchValue } = React.useContext(SearchContext);
   const [searchParams, setSearchParams] = useSearchParams();
 
   const isMounted = React.useRef(false);

@@ -9,7 +9,7 @@ export const fetchPizzasData = createAsyncThunk('pizza/fetchPizzasStatus', async
 
 const initialState = {
   items: [],
-  status: '', // loading | success | error
+  status: 'loading', // loading | success | error
 };
 
 export const pizzaSlice = createSlice({

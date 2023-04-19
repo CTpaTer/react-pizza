@@ -11,8 +11,7 @@ export const sortList = [
 
 export function Sort() {
   const dispatch = useDispatch();
-  const sortOrder = useSelector((state) => state.filter.order);
-  const sort = useSelector((state) => state.filter.sort);
+  const { order: sortOrder, sort } = useSelector((state) => state.filter);
 
   const [open, setOpen] = React.useState(false);
   const sortRef = React.useRef();
