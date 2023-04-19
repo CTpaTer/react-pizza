@@ -1,0 +1,37 @@
+.root {
+  display: flex;
+  gap: 50px;
+
+  img {
+    width: 400px;
+    height: 400px;
+  }
+
+  @media (max-width: 800px) {
+    flex-direction: column;
+  }
+}
+
+.wrapper {
+  display: flex;
+  gap: 50px;
+  flex-direction: column;
+  padding: 50px 0;
+
+  @media (max-width: 800px) {
+    padding: 0px;
+  }
+
+  h2 {
+    font-size: 40px;
+    font-weight: 700;
+  }
+
+  h4 {
+    font-size: 32px;
+  }
+
+  p {
+    font-size: 26px;
+  }
+}
