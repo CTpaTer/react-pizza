@@ -3,9 +3,10 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import styles from './FullPizza.module.scss';
+import { IPizzaData } from '../../components/interface/base-interface';
 
-export const FullPizza = () => {
-  const [pizza, setPizza] = React.useState();
+export const FullPizza: React.FC = () => {
+  const [pizza, setPizza] = React.useState<IPizzaData>();
   const { id } = useParams();
   const navigate = useNavigate();
   const url = 'https://642ed4682b883abc64182eca.mockapi.io/items/';
@@ -22,11 +23,10 @@ export const FullPizza = () => {
     }
 
     fetchPuzza();
-    // eslint-disable-next-line
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (!pizza) {
-    return 'Loading...';
+    return <>'Loading...'</>;
   }
 
   return (

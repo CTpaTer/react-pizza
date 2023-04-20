@@ -2,28 +2,29 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setSort, setSortingOrder } from '../redux/slices/filterSlice';
+import { TSortListItem } from './interface/base-interface';
 
-export const sortList = [
+export const sortList: TSortListItem[] = [
   { name: 'популярности', sortProperty: 'rating' },
   { name: 'цене', sortProperty: 'price' },
   { name: 'алфавиту', sortProperty: 'title' },
 ];
 
-export function Sort() {
+export const Sort = () => {
   const dispatch = useDispatch();
-  const { order: sortOrder, sort } = useSelector((state) => state.filter);
+  const { order: sortOrder, sort } = useSelector((state: any) => state.filter);
 
   const [open, setOpen] = React.useState(false);
-  const sortRef = React.useRef();
+  const sortRef = React.useRef<HTMLDivElement>(null);
 
-  const onClickList = (index) => {
-    dispatch(setSort(index));
+  const onClickList = (obj: TSortListItem) => {
+    dispatch(setSort(obj));
     setOpen(false);
   };
 
   React.useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (!event.composedPath().includes(sortRef.current)) {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (sortRef.current && !event.composedPath().includes(sortRef.current)) {
         setOpen(false);
       }
     };
@@ -70,4 +71,4 @@ export function Sort() {
       )}
     </div>
   );
-}
+};

@@ -5,23 +5,37 @@ import styles from './Search.module.scss';
 import { useDispatch } from 'react-redux';
 import { setSearchValue } from '../../redux/slices/filterSlice';
 
-export const Search = () => {
+export const Search: React.FC = () => {
   const dispatch = useDispatch();
   const [value, setValue] = React.useState('');
-  const inputRef = React.useRef();
+  const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const debounce = (fn, wait) => {
-    let timeout;
-    return (...arg) => {
-      if (timeout) clearTimeout(timeout);
-      timeout = setTimeout(() => fn(...arg), wait);
+  // const debounce = <F extends (...params: any[]) => void>(fn: F, delay: number) => {
+  //   let timeoutID: number;
+  //   return function (this: any, ...args: any[]) {
+  //     clearTimeout(timeoutID);
+  //     timeoutID = window.setTimeout(() => fn.apply(this, args), delay);
+  //   } as F;
+  // };
+
+  const debounce = <F extends (...args: Parameters<F>) => ReturnType<F>>(
+    func: F,
+    waitFor: number,
+  ) => {
+    let timeout: NodeJS.Timeout;
+
+    const debounced = (...args: Parameters<F>) => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func(...args), waitFor);
     };
+
+    return debounced;
   };
 
   const onClickClear = () => {
     dispatch(setSearchValue(''));
     setValue('');
-    inputRef.current.focus();
+    inputRef.current?.focus();
   };
 
   // const updateSearchValue = React.useCallback(
@@ -33,13 +47,13 @@ export const Search = () => {
 
   const updateSearchValue = React.useMemo(
     () =>
-      debounce((str) => {
+      debounce((str: string) => {
         dispatch(setSearchValue(str));
       }, 1000),
     [dispatch],
   );
 
-  const onChangeInput = (event) => {
+  const onChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
     updateSearchValue(event.target.value);
   };

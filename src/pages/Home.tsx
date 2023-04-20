@@ -5,27 +5,23 @@ import { Categories } from '../components/Categories';
 import { Sort, sortList } from '../components/Sort';
 import { PizzaBlock } from '../components/PizzaBlock';
 import { Skeleton } from '../components/PizzaBlock/Sceleton';
-import { setCategoryId, setFilters } from '../redux/slices/filterSlice';
+import { selectFilter, setCategoryId, setFilters } from '../redux/slices/filterSlice';
 import { useSearchParams } from 'react-router-dom';
-import { fetchPizzasData } from '../redux/slices/pizzaSlice';
+import { fetchPizzasData, selectPizza } from '../redux/slices/pizzaSlice';
+import { IPizzaData } from '../components/interface/base-interface';
 
 export const Home = () => {
   const dispatch = useDispatch();
-  const {
-    categoryId,
-    order: sortingOrder,
-    sort,
-    searchValue,
-  } = useSelector((state) => state.filter);
+  const { categoryId, order: sortingOrder, sort, searchValue } = useSelector(selectFilter);
   const sortType = sort.sortProperty;
-  const { items, status } = useSelector((state) => state.pizza);
+  const { items, status } = useSelector(selectPizza);
 
   const [searchParams, setSearchParams] = useSearchParams();
 
   const isMounted = React.useRef(false);
 
-  const onChangeCategory = (id) => {
-    dispatch(setCategoryId(id));
+  const onChangeCategory = (idx: number) => {
+    dispatch(setCategoryId(idx));
   };
 
   const fetchPizzas = async () => {
@@ -36,6 +32,7 @@ export const Home = () => {
     const search = searchValue ? `&title=${searchValue}` : '';
 
     dispatch(
+      //@ts-ignore
       fetchPizzasData({
         apiUrl,
         category,
@@ -88,7 +85,7 @@ export const Home = () => {
   //   })
   //   .map((obj) => <PizzaBlock key={obj.id} {...obj} />);
 
-  const pizzas = items.map((obj) => <PizzaBlock key={obj.id} {...obj} />);
+  const pizzas = items.map((obj: IPizzaData) => <PizzaBlock key={obj.id} {...obj} />);
 
   const skeleton = [...new Array(8)].map((_, index) => <Skeleton key={index} />);
 
