@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { addItem, selectCartItemById } from '../../redux/slices/cartSlice';
 import { Link } from 'react-router-dom';
-import { IPizzaData } from '../interface/base-interface';
+import { ICart, IPizzaData } from '../interface/base-interface';
 
 const typeNames = ['тонкое', 'традиционное'];
 
@@ -15,13 +15,14 @@ export const PizzaBlock: React.FC<IPizzaData> = ({ id, title, price, imageUrl, s
   const [activeSize, setActiveSize] = React.useState(0);
 
   const onClickAdd = () => {
-    const item = {
+    const item: ICart = {
       id,
       title,
       price,
       imageUrl,
       type: typeNames[activeType],
       size: sizes[activeSize],
+      count: 0,
     };
     dispatch(addItem(item));
   };

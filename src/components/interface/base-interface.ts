@@ -20,19 +20,9 @@ export interface ICart {
   type: string;
 }
 
-export interface IFilter {
-  searchValue: string;
-  categoryId: number;
-  sort: {
-    name: string;
-    sortProperty: string;
-  };
-  order: boolean;
-}
-
 export type TSortListItem = {
   name: string;
-  sortProperty: string;
+  sortProperty: 'rating' | 'title' | 'price';
 };
 
 export type TCategoriesProps = {

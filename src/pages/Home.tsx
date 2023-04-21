@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { Categories } from '../components/Categories';
 import { Sort, sortList } from '../components/Sort';
@@ -9,10 +9,13 @@ import { selectFilter, setCategoryId, setFilters } from '../redux/slices/filterS
 import { useSearchParams } from 'react-router-dom';
 import { fetchPizzasData, selectPizza } from '../redux/slices/pizzaSlice';
 import { IPizzaData } from '../components/interface/base-interface';
+import { useAppDispatch } from '../redux/store';
 
 export const Home = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { categoryId, order: sortingOrder, sort, searchValue } = useSelector(selectFilter);
+  const categoryIdString = categoryId.toString();
+  const sortingOrderString = sortingOrder.toString();
   const sortType = sort.sortProperty;
   const { items, status } = useSelector(selectPizza);
 
@@ -32,7 +35,6 @@ export const Home = () => {
     const search = searchValue ? `&title=${searchValue}` : '';
 
     dispatch(
-      //@ts-ignore
       fetchPizzasData({
         apiUrl,
         category,
@@ -51,8 +53,13 @@ export const Home = () => {
       }
 
       const params = Object.fromEntries(arr);
+      console.log(params);
 
       const list = sortList.find((obj) => obj.sortProperty === params.sortType);
+
+      // if (!list) {
+      //   throw new Error();
+      // }
 
       dispatch(
         setFilters({
@@ -69,7 +76,7 @@ export const Home = () => {
 
   React.useEffect(() => {
     if (isMounted.current) {
-      setSearchParams({ categoryId, sortType, sortingOrder });
+      setSearchParams({ categoryIdString, sortType, sortingOrderString });
     }
 
     isMounted.current = true;
