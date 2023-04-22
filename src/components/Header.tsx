@@ -8,6 +8,7 @@ import { ICart } from './interface/base-interface';
 export const Header: React.FC = () => {
   const { items, totalPrice } = useSelector(selectCart);
   const { pathname } = useLocation();
+  console.log(items);
 
   const totalCount = items.reduce((sum: number, item: ICart) => sum + item.count, 0);
 
