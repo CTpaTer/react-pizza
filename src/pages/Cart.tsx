@@ -89,12 +89,9 @@ export const Cart: React.FC = () => {
           </div>
         </div>
         <div className="content__items_cart">
-          {items.map(
-            (item: ICart) => (
-              <CartItem key={item.id} {...item} />
-            ),
-            // console.log(item),
-          )}
+          {items.map((item: ICart) => (
+            <CartItem key={item.id} {...item} />
+          ))}
         </div>
         <div className="cart__bottom">
           <div className="cart__bottom-details">
