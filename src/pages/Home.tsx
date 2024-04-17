@@ -26,6 +26,7 @@ export const Home = () => {
 
   const fetchPizzas = async () => {
     const apiUrl = 'https://642ed4682b883abc64182eca.mockapi.io/items?';
+    //const apiUrl = 'https://6dbb47678b443279.mokky.ru/items?';
     const category = categoryId > 0 ? `category=${categoryId}` : '';
     const sort = `&sortBy=${sortType}`;
     const order = sortingOrder ? '&order=desc' : '&order=asc';
